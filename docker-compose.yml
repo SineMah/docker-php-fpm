@@ -1,0 +1,95 @@
+version: "3"
+services:
+
+  docker_app:
+    user: "1000:1000"
+    container_name: docker_app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    # depends_on:
+    #   - docker_mysql
+    #   - docker_redis
+    image: docker_app:latest
+    ports:
+      - 10900:8080
+    environment:
+      - XDG_CONFIG_HOME=/var/www/
+    working_dir: /var/www
+    volumes:
+      - ../docker-app/:/var/www:delegated
+
+  # MySQL
+  # docker_mysql:
+  #   restart: always
+  #   container_name: docker_mysql
+  #   image: mysql:latest
+  #   ports:
+  #     - 3396:3306
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: secret
+  #     MYSQL_DATABASE: csi_db
+  #   volumes:
+  #     - ./my.cnf:/etc/mysql/conf.d/heimdall.cnf:delegated
+  #     - ./data-mysql/backup:/var/backup:delegated
+  #     - ./data-mysql/mount:/var/lib/mysql:delegated
+
+  # # PostgreSQL
+  # docker_pgsql:
+  #   restart: always
+  #   container_name: docker_pgsql
+  #   image: postgres:latest
+  #   ports:
+  #     - 5423:5432
+  #   environment:
+  #     POSTGRES_USER: test
+  #     POSTGRES_PASSWORD: secret
+
+  # # MariaDb
+  # docker_maria:
+  #   restart: always
+  #   container_name: docker_maria
+  #   image: mariadb:latest
+  #   ports:
+  #     - 3360:3306
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: secret
+  #     MYSQL_DATABASE: csi_db
+  #   volumes:
+  #     # - ./my.cnf:/etc/mysql/conf.d/heimdall.cnf:delegated
+  #     - ./data-maria/backup:/var/backup:delegated
+  #     - ./data-maria/mount:/var/lib/mysql:delegated
+
+  # docker_couchdb:
+  #   restart: always
+  #   container_name: docker_couchdb
+  #   image: couchdb:latest
+  #   ports:
+  #     - 5948:5984
+  #   environment:
+  #     - COUCHDB_USER=admin
+  #     - COUCHDB_PASSWORD=secret
+  #   volumes:
+  #     - ./data-couchdb/:/opt/couchdb/data
+
+  # # Redis
+  # docker_redis:
+  #   restart: always
+  #   container_name: docker_redis
+  #   image: redis:latest
+  #   ports:
+  #     - 6397:6379
+
+  # Mailhog
+  # docker_mailhog:
+  #   restart: always
+  #   container_name: docker_mailhog
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - 1025:1025 # smtp server
+  #     - 8025:8025 # web ui
+
+networks:
+  default:
+    external:
+      name: docker-bridge
